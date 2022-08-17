@@ -124,6 +124,16 @@ function gmuw_msc_get_website_info_button_action(){
 	//Is it mason wordpress?
 	if ($it_is_mason_wordpress) {
 
+		// get active theme info for this site from the Mason Site Check In plugin API
+			// Set URL for REST endpoint
+				$mason_site_check_in_theme_info_endpoint_url='https://' . $_POST['gmuw-check-on-domain'] . '/wp-json/gmuj-sci/theme-info';
+			// Try to get the info
+				$mason_site_check_in_theme_info_response = gmuw_msc_get_url_content($mason_site_check_in_theme_info_endpoint_url);
+				//echo '<p><textarea>'.$mason_site_check_in_theme_info_response.'</textarea></p>';
+			// Try to parse it as JSON
+				$mason_site_check_in_theme_info_response_json = json_decode($mason_site_check_in_theme_info_response);
+				//var_dump($mason_site_check_in_theme_info_response_json);
+
 		// get organizational info from the Mason Meta Information plugin API
 			// Set URL for REST endpoint
 				$mason_info_endpoint_url='https://' . $_POST['gmuw-check-on-domain'] . '/wp-json/gmuj-mmi/mason-site-info';
@@ -185,6 +195,24 @@ function gmuw_msc_get_website_info_button_action(){
 
 		// If it is Mason WordPress, we may be able to get additional info
 		if ($it_is_mason_wordpress) {
+
+			// Theme info
+			echo '<h2>Theme Information</h2>';
+
+
+			// Did we get a json response?
+			if (gettype($mason_site_check_in_theme_info_response_json)!='object'){
+				echo '<p>We got a response, but it was not what we expected. Most likely the Site Check-In plugin is not up-to-date. &#128533;</p>';
+			} else {
+				if ($mason_site_check_in_theme_info_response_json->data->status==404){
+						echo '<p>We got a JSON response, but it was a 404. Most likely the Site Check-In plugin is not activated or up-to-date. &#128533;</p>';
+				} else {
+					echo '<p>';
+					echo 'Theme: '.$mason_site_check_in_theme_info_response_json->theme.' ('.$mason_site_check_in_theme_info_response_json->theme_version.')';
+					echo '</p>';
+				}
+			}
+
 
 			// Organizational and contact info
 			echo '<h2>Organizational/Contact Information</h2>';
