@@ -208,7 +208,7 @@ function gmuw_msc_get_website_info_button_action(){
 						echo '<p>We got a JSON response, but it was a 404. Most likely the Site Check-In plugin is not activated or up-to-date. &#128533;</p>';
 				} else {
 					echo '<p>';
-					echo 'Theme: '.$mason_site_check_in_theme_info_response_json->theme.' ('.$mason_site_check_in_theme_info_response_json->theme_version.')';
+					echo 'Theme: '.$mason_site_check_in_theme_info_response_json->theme_name.' ('.$mason_site_check_in_theme_info_response_json->theme_version.')';
 					echo '</p>';
 				}
 			}
